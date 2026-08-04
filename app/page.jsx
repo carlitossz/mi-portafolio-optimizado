@@ -1,4 +1,3 @@
-// /app/page.js
 'use client';
 
 import { useState } from 'react';
@@ -26,7 +25,11 @@ export default function Home() {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', 
                   '#82CA9D', '#FFC658', '#FF7C7C', '#8DD1E1', '#D084D0',
-                  '#FDBF6E', '#C9D9EB', '#F0F0F0', '#B6992D', '#E8DAEF'];
+                  '#FDBF6E', '#C9D9EB', '#B6992D', '#E8DAEF', '#66D9EF'];
+
+  const carterasOrdenadas = resultados?.carteras
+    ? [...resultados.carteras].sort((a, b) => b.porciento - a.porciento)
+    : [];
 
   return (
     <div style={{ 
@@ -110,25 +113,68 @@ export default function Home() {
           <h3 style={{ fontSize: '18px', margin: '32px 0 16px' }}>
             Asignación Óptima de Capital
           </h3>
-          <ResponsiveContainer width="100%" height={420}>
-            <PieChart>
-              <Pie
-                data={resultados.carteras}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ ticker, porciento }) => porciento > 1 ? `${ticker}: ${porciento.toFixed(1)}%` : ''}
-                outerRadius={130}
-                fill="#8884d8"
-                dataKey="porciento"
-              >
-                {resultados.carteras.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip contentStyle={{ backgroundColor: '#111', border: '1px solid #333' }} />
-            </PieChart>
-          </ResponsiveContainer>
+
+          <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap', alignItems: 'center' }}>
+            
+            <div style={{ flex: '1', minWidth: '300px' }}>
+              <ResponsiveContainer width="100%" height={380}>
+                <PieChart>
+                  <Pie
+                    data={resultados.carteras}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={130}
+                    fill="#8884d8"
+                    dataKey="porciento"
+                  >
+                    {resultados.carteras.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#111', border: '1px solid #333' }}
+                    formatter={(value, name, props) => [`${value.toFixed(2)}%`, props.payload.ticker]}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div style={{ flex: '1', minWidth: '280px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ borderBottom: '2px solid #333' }}>
+                    <th style={{ textAlign: 'left', padding: '8px', color: '#999', fontSize: '13px' }}>Activo</th>
+                    <th style={{ textAlign: 'right', padding: '8px', color: '#999', fontSize: '13px' }}>Peso</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {carterasOrdenadas.map((cartera, index) => {
+                    const colorIndex = resultados.carteras.findIndex(c => c.ticker === cartera.ticker);
+                    return (
+                      <tr key={cartera.ticker} style={{ borderBottom: '1px solid #222' }}>
+                        <td style={{ padding: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ 
+                            width: '10px', 
+                            height: '10px', 
+                            borderRadius: '50%', 
+                            backgroundColor: COLORS[colorIndex % COLORS.length],
+                            display: 'inline-block',
+                            flexShrink: 0
+                          }} />
+                          {cartera.ticker}
+                        </td>
+                        <td style={{ textAlign: 'right', padding: '8px', fontWeight: 'bold' }}>
+                          {cartera.porciento.toFixed(2)}%
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+          </div>
 
           <h3 style={{ fontSize: '18px', margin: '32px 0 16px' }}>
             Métricas Finales
