@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { ejecutarAlgoritmoGenetico } from '@/lib/algoritmoGenetico';
 import { traerYCalcular, tickers } from '@/lib/getData';
 
+export const maxDuration = 60; // segundos
+
 let datosEnCache = null;
 let matrizCovEnCache = null;
 
@@ -72,8 +74,8 @@ export async function POST(request) {
       activos: tickers,
       evaluarCartera: evaluarCartera,
       configuracion: {
-        tamanoPoblacion: 30,
-        numeroGeneraciones: 50,
+        tamanoPoblacion: 100,
+        numeroGeneraciones: 500,
         tamanoTorneo: 3,
         probabilidadCruce: 1,
         probabilidadMutacion: 0.05,
