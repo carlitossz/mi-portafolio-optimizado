@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 
 export default function Home() {
   const [cargando, setCargando] = useState(false);
@@ -97,17 +97,89 @@ export default function Home() {
       {resultados && !cargando && (
         <div style={{ marginTop: '40px' }}>
 
-          <h3 style={{ fontSize: '18px', marginBottom: '16px' }}>
+          <h3 style={{ fontSize: '18px', marginBottom: '4px' }}>
             Convergencia del Sharpe Ratio
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={resultados.generaciones}>
-              <CartesianGrid stroke="#333" />
-              <XAxis dataKey="gen" stroke="#999" />
-              <YAxis stroke="#999" />
-              <Tooltip contentStyle={{ backgroundColor: '#111', border: '1px solid #333' }} />
-              <Line type="monotone" dataKey="sharpe" stroke="#0070f3" strokeWidth={2} dot={false} isAnimationActive={false} />
-            </LineChart>
+          <p style={{ color: '#888', fontSize: '13px', marginBottom: '16px' }}>
+            Evolución del mejor Índice de Sharpe encontrado en cada generación (mayor es mejor)
+          </p>
+
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', flexWrap: 'wrap' }}>
+            <div style={{ 
+              padding: '10px 16px', 
+              backgroundColor: '#111', 
+              borderRadius: '6px',
+              borderLeft: '3px solid #666'
+            }}>
+              <p style={{ color: '#888', fontSize: '11px', margin: '0 0 2px' }}>Sharpe Inicial (Gen 1)</p>
+              <p style={{ fontSize: '16px', fontWeight: 'bold', margin: 0 }}>
+                {resultados.generaciones[0]?.sharpe.toFixed(4)}
+              </p>
+            </div>
+            <div style={{ 
+              padding: '10px 16px', 
+              backgroundColor: '#111', 
+              borderRadius: '6px',
+              borderLeft: '3px solid #0070f3'
+            }}>
+              <p style={{ color: '#888', fontSize: '11px', margin: '0 0 2px' }}>Sharpe Final (Gen 500)</p>
+              <p style={{ fontSize: '16px', fontWeight: 'bold', margin: 0, color: '#0070f3' }}>
+                {resultados.mejorSharpe.toFixed(4)}
+              </p>
+            </div>
+            <div style={{ 
+              padding: '10px 16px', 
+              backgroundColor: '#111', 
+              borderRadius: '6px',
+              borderLeft: '3px solid #00C49F'
+            }}>
+              <p style={{ color: '#888', fontSize: '11px', margin: '0 0 2px' }}>Mejora Total</p>
+              <p style={{ fontSize: '16px', fontWeight: 'bold', margin: 0, color: '#00C49F' }}>
+                +{(((resultados.mejorSharpe - resultados.generaciones[0]?.sharpe) / resultados.generaciones[0]?.sharpe) * 100).toFixed(1)}%
+              </p>
+            </div>
+          </div>
+
+          <ResponsiveContainer width="100%" height={320}>
+            <AreaChart data={resultados.generaciones} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="colorSharpe" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#0070f3" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="#0070f3" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="#292929" strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="gen" 
+                stroke="#999" 
+                label={{ value: 'Generación', position: 'insideBottom', offset: -5, fill: '#888', fontSize: 12 }}
+              />
+              <YAxis 
+                stroke="#999" 
+                label={{ value: 'Índice de Sharpe', angle: -90, position: 'insideLeft', fill: '#888', fontSize: 12 }}
+              />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#111', border: '1px solid #333', borderRadius: '6px' }}
+                labelFormatter={(label) => `Generación ${label}`}
+                formatter={(value) => [value.toFixed(4), 'Sharpe Ratio']}
+              />
+              <ReferenceLine 
+                y={resultados.mejorSharpe} 
+                stroke="#00C49F" 
+                strokeDasharray="4 4" 
+                label={{ value: 'Máximo alcanzado', position: 'insideTopRight', fill: '#00C49F', fontSize: 11 }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="sharpe" 
+                stroke="#0070f3" 
+                strokeWidth={2.5}
+                fill="url(#colorSharpe)"
+                dot={false} 
+                isAnimationActive={true}
+                animationDuration={1200}
+              />
+            </AreaChart>
           </ResponsiveContainer>
 
           <h3 style={{ fontSize: '18px', margin: '32px 0 16px' }}>
