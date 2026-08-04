@@ -59,11 +59,7 @@ async function evaluarCartera(pesos) {
   return calcularSharpe(pesos, datosEnCache.retornos, matrizCovEnCache);
 }
 
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return NextResponse.json({ error: 'Solo POST' }, { status: 400 });
-  }
-
+export async function POST(request) {
   try {
     // Bajar datos si no están en cache
     if (!datosEnCache) {
