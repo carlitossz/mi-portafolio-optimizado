@@ -76,8 +76,8 @@ export default async function handler(req, res) {
       activos: tickers,
       evaluarCartera: evaluarCartera,
       configuracion: {
-        tamanoPoblacion: 100,
-        numeroGeneraciones: 500,
+        tamanoPoblacion: 30,
+        numeroGeneraciones: 50,
         tamanoTorneo: 3,
         probabilidadCruce: 1,
         probabilidadMutacion: 0.05,
