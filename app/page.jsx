@@ -195,21 +195,28 @@ export default function Home() {
           </ResponsiveContainer>
 
           <div style={{ 
-            marginTop: '16px', 
-            padding: '16px', 
-            backgroundColor: '#0a1830', 
-            borderRadius: '8px',
-            borderLeft: '3px solid #0070f3',
-            fontSize: '13px',
-            color: '#ccc',
-            lineHeight: '1.6'
+            marginTop: '20px', 
+            padding: '20px 24px', 
+            backgroundColor: '#0d1b2e', 
+            borderRadius: '12px',
+            border: '1px solid #1e3a5f',
+            fontSize: '14px',
+            color: '#c9d6e3',
+            lineHeight: '1.7',
+            display: 'flex',
+            gap: '14px'
           }}>
-            <strong style={{ color: '#0070f3' }}>💡 Cómo leer esta gráfica: </strong>
-            Cada punto representa la mejor cartera encontrada hasta esa generación. La curva sube porque 
-            en cada ciclo el algoritmo selecciona las mejores carteras (selección por torneo), las combina 
-            (cruce aritmético) y las modifica levemente (mutación) para explorar nuevas combinaciones. 
-            Que la curva se aplane hacia el final indica que el algoritmo <strong>convergió</strong>: 
-            encontró una solución cercana al óptimo y ya no hay mejoras significativas.
+            <div style={{ fontSize: '22px', flexShrink: 0 }}>💡</div>
+            <div>
+              <p style={{ color: '#4d9fff', fontWeight: 'bold', margin: '0 0 6px', fontSize: '14px' }}>
+                Cómo leer esta gráfica
+              </p>
+              Cada punto representa la mejor cartera encontrada hasta esa generación. La curva sube porque 
+              en cada ciclo el algoritmo selecciona las mejores carteras (selección por torneo), las combina 
+              (cruce aritmético) y las modifica levemente (mutación) para explorar nuevas combinaciones. 
+              Que la curva se aplane hacia el final indica que el algoritmo <strong style={{ color: '#fff' }}>convergió</strong>: 
+              encontró una solución cercana al óptimo y ya no hay mejoras significativas.
+            </div>
           </div>
 
           {/* ASIGNACIÓN DE CAPITAL */}
@@ -280,21 +287,28 @@ export default function Home() {
           </div>
 
           <div style={{ 
-            marginTop: '16px', 
-            padding: '16px', 
-            backgroundColor: '#0a1830', 
-            borderRadius: '8px',
-            borderLeft: '3px solid #0070f3',
-            fontSize: '13px',
-            color: '#ccc',
-            lineHeight: '1.6'
+            marginTop: '20px', 
+            padding: '20px 24px', 
+            backgroundColor: '#0d1b2e', 
+            borderRadius: '12px',
+            border: '1px solid #1e3a5f',
+            fontSize: '14px',
+            color: '#c9d6e3',
+            lineHeight: '1.7',
+            display: 'flex',
+            gap: '14px'
           }}>
-            <strong style={{ color: '#0070f3' }}>💡 Cómo interpretar esta distribución: </strong>
-            El activo con mayor peso es <strong>{activoPrincipal?.ticker}</strong> ({activoPrincipal?.porciento.toFixed(1)}%). 
-            En total, <strong>{cantidadConcentrada} de los 15 activos</strong> concentran más del 5% del capital cada uno; 
-            el resto recibe porcentajes muy bajos porque el algoritmo determinó que aportan poco a la relación riesgo-retorno 
-            del conjunto. Esto no es un error: significa que esos activos están muy correlacionados con otros ya presentes 
-            en la cartera, o que su retorno ajustado al riesgo individual es menos favorable.
+            <div style={{ fontSize: '22px', flexShrink: 0 }}>💡</div>
+            <div>
+              <p style={{ color: '#4d9fff', fontWeight: 'bold', margin: '0 0 6px', fontSize: '14px' }}>
+                Cómo interpretar esta distribución
+              </p>
+              El activo con mayor peso es <strong style={{ color: '#fff' }}>{activoPrincipal?.ticker}</strong> ({activoPrincipal?.porciento.toFixed(1)}%). 
+              En total, <strong style={{ color: '#fff' }}>{cantidadConcentrada} de los 15 activos</strong> concentran más del 5% del capital cada uno; 
+              el resto recibe porcentajes muy bajos porque el algoritmo determinó que aportan poco a la relación riesgo-retorno 
+              del conjunto. Esto no es un error: significa que esos activos están muy correlacionados con otros ya presentes 
+              en la cartera, o que su retorno ajustado al riesgo individual es menos favorable.
+            </div>
           </div>
 
           {/* MÉTRICAS FINALES */}
@@ -426,6 +440,15 @@ export default function Home() {
       )}
 
       <style jsx global>{`
+        body {
+          background-color: #0a0a0a;
+          color: #fff;
+          margin: 0;
+          padding: 0;
+        }
+        html {
+          background-color: #0a0a0a;
+        }
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
